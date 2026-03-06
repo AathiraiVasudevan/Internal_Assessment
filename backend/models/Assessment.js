@@ -2,29 +2,47 @@ const mongoose = require("mongoose");
 
 const assessmentSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-
-    assessmentType: { type: String, required: true },
-
-    duration: { type: Number, required: true }, // minutes
-
-    difficultyLevel: {
+    title: {
       type: String,
-      enum: ["Easy", "Medium", "Hard"],
+      required: true,
+      trim: true,
+      unique: true
+    },
+    type: {
+      type: String,
+      enum: ["Campus", "Lateral", "Employee"],
       required: true
     },
-
-    passingScore: { type: Number, required: true }, // %
-
-    instructions: { type: String },
-
-    totalQuestions: { type: Number },
-
-    totalMarks: { type: Number, default: 0 },
-
-    questions: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Question" }
-    ]
+    allowedCategories: [{
+      type: String,
+      enum: ["Student", "Lateral", "Employee"],
+      required: true
+    }],
+    passMark: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 100
+    },
+    sectionBreakdown: {
+      mcq: {
+        score: Number,
+        total: Number
+      },
+      coding: {
+        score: Number,
+        total: Number
+      },
+      descriptive: {
+        score: Number,
+        total: Number
+      }
+    },
+    totalMarks: {
+      type: Number,
+      required: true,
+      default: 100
+    }
   },
   { timestamps: true }
 );
